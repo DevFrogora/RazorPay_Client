@@ -3,13 +3,97 @@
     <head>
         <title>Start Page</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+            const payment = () => {
+
+                let amount = $("#payment_field").val();
+                console.log(amount);
+                if (amount == "" || amount == null) {
+//                    alert("amount is required");
+                    swal("Failed !!", "Amount is required !!", "error");
+
+                    return;
+                }
+                console.log("payment Started")
+                // we will ajax to send request to server to create order
+                $.ajax({
+                    url: 'createorder',
+                    data: JSON.stringify({amount: amount, info: 'order_request'}),
+                    contentType: 'application/json',
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (response) {
+                        // invoked when success
+                        console.log(response);
+                        if (response.status == 'created') {
+                            //now we can open payment form
+                            let options = {
+                                key: "rzp_test_hyRWe2OzpfSajo", // Enter the Key ID generated from the Dashboard
+                                amount: response.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                currency: "INR",
+                                name: "Pay To Win",
+                                description: "pay 1 win 10",
+                                image: "https://images-ext-2.discordapp.net/external/UsLa2scZTx1P2MOkT1xDMJPCdF66-RFmKXaEMeuN9oc/%3Fsize%3D1024/https/cdn.discordapp.com/avatars/360434951180779521/600d46cb1ba1e789b737bbd1cbc8fb22.png",
+                                order_id: response.id,
+                                handler: function (response) {
+                                    console.log(response.razorpay_payment_id);
+                                    console.log(response.razorpay_order_id);
+                                    console.log(response.razorpay_signature);
+                                    console.log("payment successfull!!");
+                                    swal("Good job!", "Congrates Payment Successful !!", "success");
+                                },
+                                prefill: {
+                                    name: "",
+                                    email: "",
+                                    contact: ""
+                                },
+                                notes: {
+                                    address: "Pay&Win with Frogora"
+                                },
+                                theme: {
+                                    color: "#3399cc"
+                                }
+                            };
+
+                            let rzp1 = new Razorpay(options);
+
+                            rzp1.on('payment.failed', function (response) {
+                                console.log(response.error.code);
+                                console.log(response.error.description);
+                                console.log(response.error.source);
+                                console.log(response.error.step);
+                                console.log(response.error.reason);
+                                console.log(response.error.metadata.order_id);
+                                console.log(response.error.metadata.payment_id);
+                                console.log("oops payment failed!!");
+                                swal("Failed !!", "Oops payment failed!!", "error");
+
+                            });
+
+                            rzp1.open();
+
+
+                        }
+                    },
+                    error: function (error) {
+                        //invoked when error
+                        console.log(error);
+                        alert("something went wrong");
+                    }
+                });
+            }
+        </script>
     </head>
     <body>
         <div>TODO write content</div>
-        <form action="createorder" method="post">
-            <label >Donate Us:</label><br>
-            <input type="number" name="amount" ><br><br>
-            <input type="submit" value="Submit">
-        </form>
+
+        <h2>Donate Us:</h2><br>
+        <input id="payment_field" type="number" name="amount" ><br><br>
+        <button onclick="payment()"> pay </button>
+
+
     </body>
 </html>
