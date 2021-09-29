@@ -1,0 +1,8 @@
+  git init
+  git config user.email "rr4428310@gmail.com"
+  git config user.name "neverDieAgain"
+  git add .
+  git commit -m "servlet starting configuration "
+  git status
+  git remote add origin git@github.com-neverDieAgain:DevFrogora/devportfolio-backend.git
+  git push -u origin master

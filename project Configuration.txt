@@ -1,0 +1,3 @@
+Using Netbeans :
+	added server : services -> server -> add -> tomcat10
+	(test) Start the server to test it , add user/pwd and allow the firewall
