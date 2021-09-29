@@ -1,0 +1,4 @@
+https://www.edureka.co/community/31716/httpservletrequest-get-json-post-data
+https://intellipaat.com/community/39037/httpservletrequest-get-json-post-data
+
+https://razorpay.com/docs/payment-gateway/server-integration/java/usage/
