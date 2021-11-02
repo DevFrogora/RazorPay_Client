@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.razopay_client;
+package com.mycompany.razorpay_client;
 
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
